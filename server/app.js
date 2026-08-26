@@ -2,10 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
-//intialize express app
 const app = express();
- 
-import cors from "cors";
 
 app.use(
   cors({
@@ -19,16 +16,15 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"]
   })
 );
-app.use(express.json());//parse incoming JSON requests
-app.use(cookieParser());//parse incoming cookies
-app.use(express.urlencoded({ extended: true }));//parse incoming URL-encoded requests
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
-//Routes
 import authRoutes from './routes/auth.routes.js';
 import eventRoutes from './routes/events.routes.js';
-import bookingRoutes from './routes/booking.routes.js'; 
+import bookingRoutes from './routes/booking.routes.js';
 app.use('/api/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
-app.use('/api/events', eventRoutes); 
+app.use('/api/events', eventRoutes);
 
 export default app;
