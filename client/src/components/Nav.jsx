@@ -258,7 +258,6 @@ export default function Nav({ scrolled, menuOpen, setMenuOpen }) {
               {/* PROFILE */}
 
               <Link
-                to="/profile"
                 className="btn btn-ghost"
                 style={{
                   display: "flex",

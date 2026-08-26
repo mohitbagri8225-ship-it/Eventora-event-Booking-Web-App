@@ -4,8 +4,8 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { User } from "../models/user.model.js";
 import { Otp } from "../models/otp.model.js";
-import { Event } from "../models/event.model.js";
-import { Booking } from "../models/booking.model.js";
+import { Event } from "../models/event.model.js"; 
+import {Booking} from "../models/Booking.model.js"
 import { sendEmail, sendBookingEmail } from "../utils/emails.js";
 import { razorPayInstance } from "../index.js";
 
