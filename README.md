@@ -2,9 +2,9 @@
 
 Eventora is a full-stack MERN event booking platform that connects **event organizers** with **users** through a modern and intuitive platform.
 
-Users can discover events, explore different categories, book tickets, and manage their bookings. Event organizers can create and manage events, update event details, and monitor their events through a dedicated organizer interface.
+Users can discover events, explore different categories, book tickets, pay securely online, and manage their bookings. Event organizers can create and manage events, update event details, and monitor their events through a dedicated organizer interface.
 
-Designed with a scalable architecture and role-based access control, Eventora demonstrates modern full-stack web development using **React, Node.js, Express, MongoDB, JWT Authentication, and Cloudinary**.
+Designed with a scalable architecture and role-based access control, Eventora demonstrates modern full-stack web development using **React, Node.js, Express, MongoDB, JWT Authentication, Cloudinary, and Razorpay**.
 
 ---
 
@@ -41,9 +41,25 @@ Users can:
 * Browse available events
 * View event details
 * Book tickets
+* Pay securely online via **Razorpay**
 * Manage their bookings
 * View previously booked events
 * Access their ticket information
+* View payment status of each booking
+
+---
+
+### 💳 Online Payments (Razorpay)
+
+Eventora integrates **Razorpay** for secure and seamless ticket payments.
+
+* Razorpay Checkout integration
+* Order creation on booking
+* Secure payment verification using signature validation
+* Payment success / failure handling
+* Booking confirmed only after successful payment
+* Payment status tracking (Pending / Paid / Failed)
+* Refund-ready architecture for future cancellations
 
 ---
 
@@ -59,6 +75,7 @@ Event organizers can:
 * View their created events
 * Manage event information
 * Control ticket availability
+* View payment/booking status for their events
 
 ---
 
@@ -80,6 +97,7 @@ Eventora provides different functionality depending on the user's role.
 
 * Discover events
 * Book tickets
+* Make secure payments
 * View booked tickets
 * Manage their profile
 
@@ -90,6 +108,7 @@ Eventora provides different functionality depending on the user's role.
 * Delete events
 * Manage their events
 * View event information
+* View booking & payment details
 
 ---
 
@@ -114,6 +133,7 @@ Eventora is designed to work across:
 * Vite
 * Lucide React
 * Framer Motion
+* Razorpay Checkout.js
 
 ## Backend
 
@@ -124,10 +144,12 @@ Eventora is designed to work across:
 * JWT Authentication
 * bcrypt
 * Multer
+* Razorpay Node SDK
 
 ## Services & Tools
 
 * Cloudinary
+* Razorpay
 * Git
 * GitHub
 * Postman
@@ -209,11 +231,11 @@ Event organizers have complete control over their events.
 
 ---
 
-# 🎟️ Booking System
+# 🎟️ Booking & Payment System
 
-Users can discover and book events through Eventora.
+Users can discover, book, and pay for events through Eventora using **Razorpay**.
 
-### Booking Flow
+### Booking & Payment Flow
 
 ```text
 User
@@ -226,12 +248,18 @@ View Event Details
   ↓
 Select Tickets
   ↓
-Confirm Booking
+Create Razorpay Order
   ↓
-Booking Created
+Razorpay Checkout (Payment)
+  ↓
+Verify Payment Signature
+  ↓
+Booking Confirmed (Payment: Paid)
   ↓
 View My Tickets
 ```
+
+If the payment fails or is cancelled, the booking is marked as **Failed / Pending** and the user can retry payment.
 
 ---
 
@@ -266,6 +294,21 @@ Eventora uses **Cloudinary** for event and profile image management.
 
 ---
 
+# 💳 Payment Management (Razorpay)
+
+Eventora uses **Razorpay** to handle all ticket payments securely.
+
+### Features
+
+* Order creation per booking
+* Razorpay Checkout on the frontend
+* Server-side payment signature verification
+* Payment status stored with each booking
+* Prevents booking confirmation without successful payment
+* Clean separation between booking creation and payment verification
+
+---
+
 # 🔐 Security Features
 
 * JWT Authentication
@@ -276,6 +319,7 @@ Eventora uses **Cloudinary** for event and profile image management.
 * Input Validation
 * Secure Environment Variables
 * Protected Admin Routes
+* Razorpay Signature Verification for Payment Integrity
 
 ---
 
@@ -295,7 +339,12 @@ CLIENT_URL=http://localhost:5173
 CLOUDINARY_CLOUD_NAME=xxxx
 CLOUDINARY_API_KEY=xxxx
 CLOUDINARY_API_SECRET=xxxx
+
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 ```
+
+> Add the public Razorpay Key ID to your **client** `.env` as well (e.g. `VITE_RAZORPAY_KEY_ID`) so the frontend can initialize Checkout.
 
 ---
 
@@ -396,6 +445,14 @@ GET    /api/bookings
 GET    /api/bookings/:id
 ```
 
+## Payments (Razorpay)
+
+```text
+POST   /api/payments/create-order
+POST   /api/payments/verify
+GET    /api/payments/:id
+```
+
 > Update these endpoints according to your actual backend routes.
 
 ---
@@ -419,6 +476,9 @@ GET    /api/bookings/:id
     Book Tickets              Manage Event
           │                         │
           ↓                         ↓
+  Pay via Razorpay          View Bookings/Payments
+          │                         │
+          ↓                         ↓
     My Tickets                 My Events
 ```
 
@@ -435,6 +495,7 @@ Eventora includes pages such as:
 * Login
 * Register
 * Profile
+* Checkout / Payment
 * My Tickets
 * My Events
 * Post Event
@@ -455,6 +516,7 @@ Eventora focuses on providing a modern event discovery experience with:
 * Modern typography
 * Responsive navigation
 * Animated UI components
+* Seamless in-app Razorpay checkout experience
 
 ---
 
@@ -479,6 +541,10 @@ The application can be deployed using:
 
 * Cloudinary
 
+### Payments
+
+* Razorpay
+
 ---
 
 # 📸 Screenshots
@@ -491,6 +557,7 @@ Add screenshots of:
 * 🎪 Event Discovery
 * 🎟️ Event Details
 * 🎫 Booking Page
+* 💳 Razorpay Payment Checkout
 * 🎟️ My Tickets
 * 👨‍💼 Admin Dashboard
 * ➕ Create Event
@@ -501,7 +568,6 @@ Add screenshots of:
 
 # 🎯 Future Improvements
 
-* 💳 Online Payment Gateway
 * 📧 Email Booking Confirmation
 * 📱 QR Code Tickets
 * 🔔 Push Notifications
@@ -516,6 +582,8 @@ Add screenshots of:
 * 💬 AI Event Assistant
 * 📅 Calendar Integration
 * 🌙 Dark Mode
+* 💸 Automated Refunds via Razorpay
+* 🧾 Downloadable Payment Invoices
 
 ---
 
@@ -567,13 +635,13 @@ The AI assistant can then search the Eventora event database and provide persona
                     │      API        │
                     └────────┬────────┘
                              │
-                 ┌───────────┴───────────┐
-                 │                       │
-                 ↓                       ↓
-          ┌──────────────┐       ┌──────────────┐
-          │   MongoDB    │       │  Cloudinary  │
-          │   Database   │       │    Images    │
-          └──────────────┘       └──────────────┘
+              ┌──────────────┼──────────────┐
+              │              │              │
+              ↓              ↓              ↓
+      ┌──────────────┐┌──────────────┐┌──────────────┐
+      │   MongoDB    ││  Cloudinary  ││   Razorpay   │
+      │   Database   ││    Images    ││   Payments   │
+      └──────────────┘└──────────────┘└──────────────┘
 ```
 
 ---
@@ -590,10 +658,12 @@ Eventora demonstrates practical implementation of:
 * MongoDB database management
 * Image uploads
 * Cloudinary integration
+* Razorpay payment gateway integration
+* Secure payment verification
 * Protected React routes
 * Responsive frontend development
 * Modern UI animations
-* Event and booking management
+* Event, booking, and payment management
 
 ---
 
@@ -611,4 +681,4 @@ MNNIT Allahabad
 
 If you like **Eventora**, consider giving the repository a ⭐ on GitHub!
 
-Made with ❤️ using the MERN Stack.
+Made with ❤️ using the MERN Stack + Razorpay.
