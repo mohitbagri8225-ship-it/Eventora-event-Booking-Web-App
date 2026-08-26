@@ -31,7 +31,7 @@ export default function MyTickets() {
     useEffect(() => {
         const load = async () => {
             try {
-                const res = await fetch("http://localhost:5000/api/bookings/my", { credentials: "include" });
+                const res = await fetch("https://eventora-event-booking-web-app-1.onrender.com/api/bookings/my", { credentials: "include" });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.message || "Failed to load bookings");
                 setBookings(Array.isArray(data.data) ? data.data.map(normalizeBooking) : []);
@@ -59,7 +59,7 @@ export default function MyTickets() {
     const handleCancelConfirmed = async (bookingId) => {
         setCancelling(bookingId);
         try {
-            const res = await fetch(`http://localhost:5000/api/bookings/${bookingId}`, {
+            const res = await fetch(`https://eventora-event-booking-web-app-1.onrender.com/api/bookings/${bookingId}`, {
                 method: "DELETE",
                 credentials: "include",
             });

@@ -48,7 +48,7 @@ const BookEvent = () => {
     const fetchEvent = async () => {
       setEventLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/api/events/${eventId}`, {
+        const res = await fetch(`https://eventora-event-booking-web-app-1.onrender.com/api/events/${eventId}`, {
           credentials: "include",
         });
         const data = await res.json();
@@ -85,7 +85,7 @@ const BookEvent = () => {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/bookings/send-otp", {
+      const res = await fetch("https://eventora-event-booking-web-app-1.onrender.com/api/bookings/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -126,7 +126,7 @@ const BookEvent = () => {
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/bookings/book-event",
+        "https://eventora-event-booking-web-app-1.onrender.com/api/bookings/book-event",
         {
           method: "POST",
           headers: {
@@ -178,7 +178,7 @@ const BookEvent = () => {
         handler: async function (response) { 
           
           const res = await fetch(
-            `http://localhost:5000/api/bookings/confirm`,
+            `https://eventora-event-booking-web-app-1.onrender.com/api/bookings/confirm`,
             {
               method: "POST",
               headers: {

@@ -40,7 +40,7 @@ const ViewEvent = () => {
         setError("");
 
         const res = await axios.get(
-          `http://localhost:5000/api/events/${eventId}`,
+          `https://eventora-event-booking-web-app-1.onrender.com/api/events/${eventId}`,
           {
             withCredentials: true,
           }
@@ -104,7 +104,7 @@ const ViewEvent = () => {
       };
 
       await axios.put(
-        `http://localhost:5000/api/events/${eventId}`,
+        `https://eventora-event-booking-web-app-1.onrender.com/api/events/${eventId}`,
         payload,
         {
           withCredentials: true,

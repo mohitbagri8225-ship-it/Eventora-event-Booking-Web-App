@@ -80,7 +80,7 @@ function validate(form) {
   return errors;
 }
 
-export function PostEvent({ apiBaseUrl = "http://localhost:5000/api/events/create-event", onCreated }) {
+export function PostEvent({ apiBaseUrl = "https://eventora-event-booking-web-app-1.onrender.com/api/events/create-event", onCreated }) {
   const [form, setForm] = useState(INITIAL_FORM);
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});

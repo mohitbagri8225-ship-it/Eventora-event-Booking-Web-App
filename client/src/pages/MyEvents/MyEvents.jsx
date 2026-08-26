@@ -25,7 +25,7 @@ export default function MyEvents() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/events/my-events", {
+        const res = await fetch("https://eventora-event-booking-web-app-1.onrender.com/api/events/my-events", {
           credentials: "include",
         });
 

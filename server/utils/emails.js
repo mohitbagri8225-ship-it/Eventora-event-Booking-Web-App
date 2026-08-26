@@ -9,6 +9,14 @@ const transporter = nodemailer.createTransport({
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS
     }
+}
+);
+transporter.verify((error, success) => {
+    if (error) {
+        console.error("❌ Gmail transporter error:", error);
+    } else {
+        console.log("✅ Gmail transporter is ready");
+    }
 });
 
 // Capitalize first letter of "type" for nicer display (e.g. "login" -> "Login")

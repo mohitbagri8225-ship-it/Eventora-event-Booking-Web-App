@@ -33,7 +33,7 @@ const SignUp = () => {
 
         try {
             const res = await fetch(
-                "http://localhost:5000/api/auth/register",
+                "https://eventora-event-booking-web-app-1.onrender.com/api/auth/register",
                 {
                     method: "POST",
                     headers: {
@@ -83,7 +83,7 @@ const SignUp = () => {
 
         try {
             const res = await fetch(
-                "http://localhost:5000/api/auth/verify-otp",
+                "https://eventora-event-booking-web-app-1.onrender.com/api/auth/verify-otp",
                 {
                     method: "POST",
                     headers: {

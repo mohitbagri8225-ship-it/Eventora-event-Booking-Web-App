@@ -13,10 +13,12 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
 
+  console.log(import.meta.env.API_URL);
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
+    
 
     try {
       const res = await fetch("https://eventora-event-booking-web-app-1.onrender.com/api/auth/login", {
@@ -68,7 +70,7 @@ navigate("/");
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/verify-otp", {
+      const res = await fetch("https://eventora-event-booking-web-app-1.onrender.com/api/auth/verify-otp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

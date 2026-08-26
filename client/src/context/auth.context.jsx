@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        await fetch("http://localhost:5000/api/auth/logout", {
+        await fetch("https://eventora-event-booking-web-app-1.onrender.com/api/auth/logout", {
             method: "POST",
             credentials: "include",
         });
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
         const getCurrentUser = async () => {
             try {
                 const res = await fetch(
-                    "http://localhost:5000/api/auth/me",
+                    "https://eventora-event-booking-web-app-1.onrender.com/api/auth/me",
                     {
                         credentials: "include",
                     }
