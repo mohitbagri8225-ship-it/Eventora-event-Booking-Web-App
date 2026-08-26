@@ -7,13 +7,15 @@ import ApiError from "../utils/apiError.js"
 //if valid add the user to the request 
 //always call the next middleware 
 const verifyJwt = asyncHandler(async (req, res, next) => {
-    const authHeader = req.headers.authorization || req.cookies.token;
+    const bearerToken = req.headers.authorization?.startsWith("Bearer ")
+        ? req.headers.authorization.replace("Bearer ", "")
+        : null;
 
-    if (!authHeader && !req.cookies) {
+    const token = bearerToken || req.cookies?.token;
+
+    if (!token) {
         throw new ApiError(401, "Unauthorized request");
     }
-
-    const token = authHeader.replace("Bearer ", "");
 
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
