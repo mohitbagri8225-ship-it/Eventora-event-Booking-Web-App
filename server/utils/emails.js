@@ -1,26 +1,9 @@
-import nodemailer from "nodemailer";
+import sgMail from "@sendgrid/mail";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-    service:'gmail',
-    auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS
-    },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000
-});
-
-transporter.verify((error, success) => {
-    if (error) {
-        console.error("❌ Gmail transporter error:", error);
-    } else {
-        console.log("✅ Gmail transporter is ready");
-    }
-});
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export const sendEmail = async (email, otp, type) => {
     const title = `Your ${type} OTP Code`;
@@ -28,9 +11,9 @@ export const sendEmail = async (email, otp, type) => {
     console.log("📧 Sending OTP to:", email);
     console.log("🔢 OTP:", otp);
 
-    const mailOptions = {
-        from: process.env.GMAIL_USER,
+    const msg = {
         to: email,
+        from: process.env.SENDGRID_FROM_EMAIL, // must match your verified sender
         subject: title,
         text: `Your OTP for ${type} is ${otp}. It will expire in 5 minutes.`,
         html: `
@@ -39,19 +22,16 @@ export const sendEmail = async (email, otp, type) => {
                     <div style="background:#4f46e5;color:#fff;text-align:center;padding:16px;">
                         <h2 style="margin:0;font-size:18px;">${title}</h2>
                     </div>
-
                     <div style="padding:24px;text-align:center;">
                         <p style="color:#666;font-size:14px;">
                             Use the code below to verify your <strong>${type}</strong>:
                         </p>
-
                         <div style="display:inline-block;padding:10px 22px;
                             background:#f3f4f6;border:2px dashed #4f46e5;
                             border-radius:8px;font-size:26px;font-weight:bold;
                             letter-spacing:6px;color:#111;">
                             ${otp}
                         </div>
-
                         <p style="color:#dc2626;font-weight:bold;font-size:13px;">
                             Expires in 5 minutes
                         </p>
@@ -62,11 +42,10 @@ export const sendEmail = async (email, otp, type) => {
     };
 
     try {
-        const info = await transporter.sendMail(mailOptions);
+        const info = await sgMail.send(msg);
         console.log("✅ Email sent successfully");
-        console.log("Message ID:", info.messageId);
     } catch (error) {
-        console.error("❌ SEND EMAIL ERROR:", error);
+        console.error("❌ SEND EMAIL ERROR:", error.response ? error.response.body : error);
         throw error;
     }
 };
@@ -74,9 +53,9 @@ export const sendEmail = async (email, otp, type) => {
 export const sendBookingEmail = async (email, userName, eventName, eventDate, seatNumber) => {
     const title = `Booking Confirmed: ${eventName}`;
 
-    const mailOptions = {
-        from: process.env.GMAIL_USER,
+    const msg = {
         to: email,
+        from: process.env.SENDGRID_FROM_EMAIL,
         subject: title,
         text: `Hello ${userName},\n\nYour booking for "${eventName}" is confirmed.\n\nDate: ${eventDate}\nSeat: ${seatNumber ? seatNumber : 0}\n\nThank you for booking with us!`,
         html: `
@@ -99,6 +78,11 @@ export const sendBookingEmail = async (email, userName, eventName, eventDate, se
         `
     };
 
-    await transporter.sendMail(mailOptions);
-    console.log(`Booking confirmation email sent to ${email} for event "${eventName}"`);
+    try {
+        await sgMail.send(msg);
+        console.log(`Booking confirmation email sent to ${email} for event "${eventName}"`);
+    } catch (error) {
+        console.error("❌ BOOKING EMAIL ERROR:", error.response ? error.response.body : error);
+        throw error;
+    }
 };
