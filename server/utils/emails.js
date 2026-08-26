@@ -4,10 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    family: 4,
+    service:'gmail',
     auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS
@@ -16,6 +13,7 @@ const transporter = nodemailer.createTransport({
     greetingTimeout: 10000,
     socketTimeout: 10000
 });
+
 transporter.verify((error, success) => {
     if (error) {
         console.error("❌ Gmail transporter error:", error);
@@ -23,9 +21,6 @@ transporter.verify((error, success) => {
         console.log("✅ Gmail transporter is ready");
     }
 });
-
-// Capitalize first letter of "type" for nicer display (e.g. "login" -> "Login")
-// const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
 export const sendEmail = async (email, otp, type) => {
     const title = `Your ${type} OTP Code`;
@@ -68,16 +63,15 @@ export const sendEmail = async (email, otp, type) => {
 
     try {
         const info = await transporter.sendMail(mailOptions);
-
         console.log("✅ Email sent successfully");
         console.log("Message ID:", info.messageId);
-
     } catch (error) {
         console.error("❌ SEND EMAIL ERROR:", error);
         throw error;
     }
 };
-export const sendBookingEmail = async (email, userName, eventName,eventDate,seatNumber) => {
+
+export const sendBookingEmail = async (email, userName, eventName, eventDate, seatNumber) => {
     const title = `Booking Confirmed: ${eventName}`;
 
     const mailOptions = {
@@ -94,8 +88,8 @@ export const sendBookingEmail = async (email, userName, eventName,eventDate,seat
                     <div style="padding:24px;">
                         <p style="color:#333;font-size:14px;">Hi ${userName}, your seat is booked for <strong>${eventName}</strong>.</p>
                         <table style="width:100%;font-size:13px;color:#444;border-collapse:collapse;margin-top:10px;">
-                            <tr><td style="padding:4px 0;color:#888;">Date</td><td style="text-align:right;">${eventDate}</td></tr> 
-                            <tr><td style="padding:4px 0;color:#888;">Seat</td><td style="text-align:right;">${seatNumber}</td></tr> 
+                            <tr><td style="padding:4px 0;color:#888;">Date</td><td style="text-align:right;">${eventDate}</td></tr>
+                            <tr><td style="padding:4px 0;color:#888;">Seat</td><td style="text-align:right;">${seatNumber}</td></tr>
                         </table>
                         <p style="color:#888;font-size:12px;margin-top:16px;">Thank you for booking with us!</p>
                     </div>
@@ -104,7 +98,7 @@ export const sendBookingEmail = async (email, userName, eventName,eventDate,seat
             </div>
         `
     };
+
     await transporter.sendMail(mailOptions);
     console.log(`Booking confirmation email sent to ${email} for event "${eventName}"`);
 };
-

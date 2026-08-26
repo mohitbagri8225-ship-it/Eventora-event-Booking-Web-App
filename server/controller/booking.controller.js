@@ -35,7 +35,6 @@ const verifyRazorpaySignature = (
 
 
 const sendBookingOtp = asyncHandler(async (req, res) => {
-    console.log(req);
     
     const { eventId } = req.body;
     const userEmail = req.user.email;
