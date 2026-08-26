@@ -5,20 +5,20 @@ import cookieParser from 'cookie-parser';
 //intialize express app
 const app = express();
  
-const allowedOrigins = [
-    "http://localhost:5173",
-    "https://eventora-event-booking-web-app-1.onrender.com/"
-];
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true
-}));
+import cors from "cors";
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://eventora-event-booking-web-app-dwrq-nine.vercel.app"
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+);
 app.use(express.json());//parse incoming JSON requests
 app.use(cookieParser());//parse incoming cookies
 app.use(express.urlencoded({ extended: true }));//parse incoming URL-encoded requests

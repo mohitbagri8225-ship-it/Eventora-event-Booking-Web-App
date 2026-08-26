@@ -1,7 +1,14 @@
 import sgMail from "@sendgrid/mail";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config(); 
+console.log("=== DEBUG ===");
+console.log("Key exists:", !!process.env.SENDGRID_API_KEY);
+console.log("Key prefix:", process.env.SENDGRID_API_KEY?.slice(0, 5));
+console.log("Key length:", process.env.SENDGRID_API_KEY?.length);
+console.log("From email:", JSON.stringify(process.env.SENDGRID_FROM_EMAIL));
+console.log("=============");
+
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
