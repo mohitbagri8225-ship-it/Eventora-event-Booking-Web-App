@@ -167,7 +167,7 @@ const BookEvent = () => {
       const bookingId = data.data._id; 
 
       const options = {
-        key: import.meta.env.RAZOR_API_KEY,
+        key: import.meta.env.VITE_RAZOR_API_KEY,
         amount: order.amount,
         currency: order.currency,
         name: "Eventora",
