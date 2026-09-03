@@ -70,7 +70,7 @@ const sendBookingOtp = asyncHandler(async (req, res) => {
 
 const bookEvent = asyncHandler(async (req, res) => {
     const { eventId, otp, quantity } = req.body;
-    console.log(otp);
+    console.log(req.user.email);
     
 
     if (!eventId || !otp || !quantity) {
