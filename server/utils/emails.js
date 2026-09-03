@@ -1,29 +1,26 @@
-import nodemailer from "nodemailer";
+import sgMail from "@sendgrid/mail";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config(); 
+console.log("=== DEBUG ===");
+console.log("Key exists:", !!process.env.SENDGRID_API_KEY);
+console.log("Key prefix:", process.env.SENDGRID_API_KEY?.slice(0, 5));
+console.log("Key length:", process.env.SENDGRID_API_KEY?.length);
+console.log("From email:", JSON.stringify(process.env.SENDGRID_FROM_EMAIL));
+console.log("=============");
 
-const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || "smtp.gmail.com",
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: process.env.SMTP_SECURE === "true", // true for port 465, false for others
-    auth: {
-        user: process.env.SMTP_USER || process.env.GMAIL_USER,
-        pass: process.env.SMTP_PASS || process.env.GMAIL_PASS,
-    },
-});
 
-const FROM_EMAIL = process.env.SMTP_FROM_EMAIL || process.env.GMAIL_FROM_EMAIL || process.env.SMTP_USER || process.env.GMAIL_USER;
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export const sendEmail = async (email, otp, type) => {
     const title = `Your ${type} OTP Code`;
 
-    console.log(" Sending OTP to:", email);
-    console.log(" OTP:", otp);
+    console.log("📧 Sending OTP to:", email);
+    console.log("🔢 OTP:", otp);
 
     const msg = {
         to: email,
-        from: FROM_EMAIL, // must match your verified sender / SMTP account
+        from: process.env.SENDGRID_FROM_EMAIL, // must match your verified sender
         subject: title,
         text: `Your OTP for ${type} is ${otp}. It will expire in 5 minutes.`,
         html: `
@@ -52,10 +49,10 @@ export const sendEmail = async (email, otp, type) => {
     };
 
     try {
-        const info = await transporter.sendMail(msg);
-        console.log("✅ Email sent successfully:", info.messageId);
+        const info = await sgMail.send(msg);
+        console.log("✅ Email sent successfully");
     } catch (error) {
-        console.error("❌ SEND EMAIL ERROR:", error);
+        console.error("❌ SEND EMAIL ERROR:", error.response ? error.response.body : error);
         throw error;
     }
 };
@@ -65,7 +62,7 @@ export const sendBookingEmail = async (email, userName, eventName, eventDate, se
 
     const msg = {
         to: email,
-        from: FROM_EMAIL,
+        from: process.env.SENDGRID_FROM_EMAIL,
         subject: title,
         text: `Hello ${userName},\n\nYour booking for "${eventName}" is confirmed.\n\nDate: ${eventDate}\nSeat: ${seatNumber ? seatNumber : 0}\n\nThank you for booking with us!`,
         html: `
@@ -89,10 +86,10 @@ export const sendBookingEmail = async (email, userName, eventName, eventDate, se
     };
 
     try {
-        const info = await transporter.sendMail(msg);
-        console.log(`Booking confirmation email sent to ${email} for event "${eventName}" (${info.messageId})`);
+        await sgMail.send(msg);
+        console.log(`Booking confirmation email sent to ${email} for event "${eventName}"`);
     } catch (error) {
-        console.error(" BOOKING EMAIL ERROR:", error);
+        console.error("❌ BOOKING EMAIL ERROR:", error.response ? error.response.body : error);
         throw error;
     }
 };
